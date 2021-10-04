@@ -6,11 +6,11 @@ import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.DataLoader
 import org.nfl.big.data.bowl.entity.Games
 
-class GameDataLoader(fileName: String, spark: SparkSession) extends DataLoader {
+class GameDataLoader(filePath: String, spark: SparkSession) extends DataLoader {
 
   override def loadRDD(): RDD[Games] = {
 
-    val gameCSV: RDD[String] = this.spark.sparkContext.textFile(this.fileName)
+    val gameCSV: RDD[String] = this.spark.sparkContext.textFile(this.filePath)
 
     val gamesRDD: RDD[Games] = gameCSV
       .map(row => row.split(",", -1))
