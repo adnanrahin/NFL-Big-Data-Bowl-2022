@@ -3,8 +3,9 @@ package org.nfl.big.data.bowl
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
-import org.nfl.big.data.bowl.dataloader.{GameDataLoader, PFFScoutingDataLoader, PlayersDataLoader, PlaysDataLoader, TrackingDataLoader}
-import org.nfl.big.data.bowl.entity.{Games, PFFScoutingData, Players, Plays, Tracking}
+import org.nfl.big.data.bowl.constant.Constant
+import org.nfl.big.data.bowl.dataloader._
+import org.nfl.big.data.bowl.entity._
 
 object BigDataBowlProcessor {
 
@@ -20,11 +21,13 @@ object BigDataBowlProcessor {
 
     val sc = spark.sparkContext
 
-    val gameDataLoader: GameDataLoader = new GameDataLoader("dataset/games.csv", spark)
-    val pffScoutingDataLoader: PFFScoutingDataLoader = new PFFScoutingDataLoader("dataset/PFFScoutingData.csv", spark)
-    val playersDataLoader: PlayersDataLoader = new PlayersDataLoader("dataset/players.csv", spark)
-    val playsDataLoader: PlaysDataLoader = new PlaysDataLoader("dataset/plays.csv", spark)
-    val trackingDataLoader: TrackingDataLoader = new TrackingDataLoader("dataset/tracking2018.csv", spark)
+    val dataPath = args(0)
+
+    val gameDataLoader: GameDataLoader = new GameDataLoader(dataPath + Constant.GAMES, spark)
+    val pffScoutingDataLoader: PFFScoutingDataLoader = new PFFScoutingDataLoader(dataPath + Constant.PFFSCOUNTINGDATA, spark)
+    val playersDataLoader: PlayersDataLoader = new PlayersDataLoader(dataPath + Constant.PLAYERS, spark)
+    val playsDataLoader: PlaysDataLoader = new PlaysDataLoader(dataPath + Constant.PLAYS, spark)
+    val trackingDataLoader: TrackingDataLoader = new TrackingDataLoader(dataPath + Constant.TRACKING, spark)
 
     val gameRDD: RDD[Games] = gameDataLoader.loadRDD()
     val pffScoutingRDD: RDD[PFFScoutingData] = pffScoutingDataLoader.loadRDD()
@@ -32,7 +35,7 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val tackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
-    playsRDD.foreach(row => println(row.playId))
+    tackingRDD.foreach(row => println(row.playId))
 
   }
 
