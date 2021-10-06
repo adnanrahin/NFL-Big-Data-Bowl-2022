@@ -13,8 +13,8 @@ case class Plays(
                   kickerId: String,
                   returnerId: String,
                   kickBlockerId: String,
-                  yardlineSide: String,
-                  yardlineNumber: String,
+                  yardLineSide: String,
+                  yardLineNumber: String,
                   gameClock: String,
                   penaltyCodes: String,
                   penaltyJerseyNumbers: String,
@@ -25,6 +25,6 @@ case class Plays(
                   kickLength: String,
                   kickReturnYardage: String,
                   playResult: String,
-                  absoluteYardlineNumber: String
+                  absoluteYardLineNumber: String
 
                 )

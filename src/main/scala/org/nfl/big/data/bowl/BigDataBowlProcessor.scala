@@ -35,8 +35,6 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val tackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
-    tackingRDD.foreach(row => println(row.playId))
-
   }
 
 }
