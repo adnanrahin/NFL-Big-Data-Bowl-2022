@@ -33,7 +33,13 @@ object BigDataBowlProcessor {
     val pffScoutingRDD: RDD[PFFScoutingData] = pffScoutingDataLoader.loadRDD()
     val playersRDD: RDD[Players] = playersDataLoader.loadRDD()
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
-    val tackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
+    val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
+
+    println(gameRDD.count())
+    println(pffScoutingRDD.count())
+    println(playsRDD.count())
+    println(playersRDD.count())
+    println(trackingRDD.count())
 
   }
 
