@@ -14,10 +14,20 @@ class GameDataLoader(filePath: String, spark: SparkSession) extends DataLoader {
 
     val gamesRDD: RDD[Games] = gameCSV
       .map(row => row.split(",", -1))
-      .map(str => Games(str(0),
-        str(1), str(2), str(3), str(4), str(5), str(6))).mapPartitionsWithIndex {
-      (idx, iter) => if (idx == 0) iter.drop(1) else iter
-    }
+      .map(str =>
+        Games(
+          str(0).replace("\"", ""),
+          str(1).replace("\"", ""),
+          str(2).replace("\"", ""),
+          str(3).replace("\"", ""),
+          str(4).replace("\"", ""),
+          str(5).replace("\"", ""),
+          str(6).replace("\"", "")
+        )
+      )
+      .mapPartitionsWithIndex {
+        (idx, iter) => if (idx == 0) iter.drop(1) else iter
+      }
 
     gamesRDD.persist(StorageLevel.MEMORY_AND_DISK)
 
