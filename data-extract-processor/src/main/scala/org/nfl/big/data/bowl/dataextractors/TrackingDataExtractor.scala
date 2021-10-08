@@ -10,7 +10,8 @@ object TrackingDataExtractor {
   private def findEventByEventName(event: String, trackingRDD: RDD[Tracking]): RDD[Tracking] = {
 
     val events: RDD[Tracking] =
-      trackingRDD.filter(track => track.event.equalsIgnoreCase(event))
+      trackingRDD
+        .filter(track => track.event.equalsIgnoreCase(event))
 
     events.persist(StorageLevel.MEMORY_AND_DISK)
   }
