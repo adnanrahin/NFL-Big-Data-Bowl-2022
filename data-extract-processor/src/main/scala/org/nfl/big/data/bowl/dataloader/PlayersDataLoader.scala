@@ -6,7 +6,7 @@ import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.DataLoader
 import org.nfl.big.data.bowl.entity.Players
 
-class PlayersDataLoader(filePath: String, spark: SparkSession) extends DataLoader{
+class PlayersDataLoader(filePath: String, spark: SparkSession) extends DataLoader {
 
   override def loadRDD(): RDD[Players] = {
 
@@ -14,10 +14,20 @@ class PlayersDataLoader(filePath: String, spark: SparkSession) extends DataLoade
 
     val playersDataRDD: RDD[Players] = playersDataCSV
       .map(row => row.split(",", -1))
-      .map(str => Players(str(0),
-        str(1), str(2), str(3), str(4), str(5), str(6))).mapPartitionsWithIndex {
-      (idx, iter) => if (idx == 0) iter.drop(1) else iter
-    }
+      .map(str =>
+        Players(
+          str(0).replace("\"", ""),
+          str(1).replace("\"", ""),
+          str(2).replace("\"", ""),
+          str(3).replace("\"", ""),
+          str(4).replace("\"", ""),
+          str(5).replace("\"", ""),
+          str(6).replace("\"", "")
+        )
+      )
+      .mapPartitionsWithIndex {
+        (idx, iter) => if (idx == 0) iter.drop(1) else iter
+      }
 
     playersDataRDD.persist(StorageLevel.MEMORY_AND_DISK)
 
