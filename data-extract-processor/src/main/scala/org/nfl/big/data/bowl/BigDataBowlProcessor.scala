@@ -35,11 +35,6 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
-    println(gameRDD.count())
-    println(pffScoutingRDD.count())
-    println(playsRDD.count())
-    println(playersRDD.count())
-    println(trackingRDD.count())
 
   }
 
