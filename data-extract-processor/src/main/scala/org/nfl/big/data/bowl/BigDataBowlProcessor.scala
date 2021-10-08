@@ -4,6 +4,7 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 import org.nfl.big.data.bowl.constant.Constant
+import org.nfl.big.data.bowl.dataextractors.TrackingDataExtractor
 import org.nfl.big.data.bowl.dataloader._
 import org.nfl.big.data.bowl.entity._
 
@@ -35,6 +36,7 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
+    TrackingDataExtractor.findEventByEventNameToDF("touchdown", trackingRDD, spark)
 
   }
 
