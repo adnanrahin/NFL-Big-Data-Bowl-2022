@@ -7,5 +7,6 @@ object Constant {
   final val PLAYERS = "players.csv"
   final val PLAYS = "plays.csv"
   final val TRACKING = "tracking\\*"
+  final val FILTER_DIR = "filterdata"
 
 }

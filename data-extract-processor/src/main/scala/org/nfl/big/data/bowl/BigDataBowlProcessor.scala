@@ -2,7 +2,7 @@ package org.nfl.big.data.bowl
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import org.nfl.big.data.bowl.constant.Constant
 import org.nfl.big.data.bowl.dataextractors.TrackingDataExtractor
 import org.nfl.big.data.bowl.dataloader._
@@ -36,8 +36,19 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
-    TrackingDataExtractor.findEventByEventNameToDF("touchdown", trackingRDD, spark, dataPath)
+    val trackDF = TrackingDataExtractor.findEventByEventNameToDF("touchdown", trackingRDD, spark)
+    dataWriter(dataFrame = trackDF, dataPath = dataPath, directoryName = "touchdown")
 
+  }
+
+  def dataWriter(dataFrame: DataFrame, dataPath: String, directoryName: String): Unit = {
+
+    val destinationDirectory: String = dataPath + Constant.FILTER_DIR + "/" + directoryName
+
+    dataFrame
+      .write
+      .mode(SaveMode.Overwrite)
+      .parquet(destinationDirectory)
   }
 
 }

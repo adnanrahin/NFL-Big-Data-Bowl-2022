@@ -1,7 +1,7 @@
 package org.nfl.big.data.bowl.dataextractors
 
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.entity.Tracking
 
@@ -16,14 +16,9 @@ object TrackingDataExtractor {
     events.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
-  def findEventByEventNameToDF(event: String, trackingRDD: RDD[Tracking], spark: SparkSession, dataPath: String): Unit = {
-
+  def findEventByEventNameToDF(event: String, trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
     val events: RDD[Tracking] = findEventByEventName(event, trackingRDD)
-
-    val df = spark.createDataFrame(events)
-
-    df.write.parquet(dataPath + "filterdata" + event)
-
+    spark.createDataFrame(events)
   }
 
 }
