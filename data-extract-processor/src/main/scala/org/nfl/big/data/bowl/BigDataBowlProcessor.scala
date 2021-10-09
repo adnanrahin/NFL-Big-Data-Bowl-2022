@@ -36,7 +36,7 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
-    TrackingDataExtractor.findEventByEventNameToDF("touchdown", trackingRDD, spark)
+    TrackingDataExtractor.findEventByEventNameToDF("touchdown", trackingRDD, spark, dataPath)
 
   }
 

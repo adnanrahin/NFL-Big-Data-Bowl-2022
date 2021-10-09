@@ -16,13 +16,14 @@ object TrackingDataExtractor {
     events.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
-  def findEventByEventNameToDF(event: String, trackingRDD: RDD[Tracking], spark: SparkSession): Unit = {
+  def findEventByEventNameToDF(event: String, trackingRDD: RDD[Tracking], spark: SparkSession, dataPath: String): Unit = {
 
     val events: RDD[Tracking] = findEventByEventName(event, trackingRDD)
 
-    spark
-      .createDataFrame(events)
-      .show(truncate = false)
+    val df = spark.createDataFrame(events)
+
+    df.write.parquet(dataPath + "filterdata" + event)
+
   }
 
 }
