@@ -36,9 +36,11 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
-    val trackDF = TrackingDataExtractor.findEventByEventNameToDF("touchdown", trackingRDD, spark)
-    dataWriter(dataFrame = trackDF, dataPath = dataPath, directoryName = "touchdown")
+    val touchdownDF = TrackingDataExtractor.findEventByEventNameToDF("touchdown", trackingRDD, spark)
+    dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
 
+    val homeTouchDownDF = TrackingDataExtractor.findHomeTeamEventToDF("touchdown", "left", trackingRDD, spark)
+    dataWriter(dataFrame = homeTouchDownDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
   }
 
   def dataWriter(dataFrame: DataFrame, dataPath: String, directoryName: String): Unit = {
