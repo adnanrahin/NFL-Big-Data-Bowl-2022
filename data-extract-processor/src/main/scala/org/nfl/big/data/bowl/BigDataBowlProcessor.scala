@@ -53,7 +53,7 @@ object BigDataBowlProcessor {
     dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
 
     val awayTouchDownRightDF = TrackingDataExtractor
-      .findAwayTeamEventToDF("touchdown", "left", trackingRDD, spark)
+      .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
     dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownright")
 
     spark.close()
