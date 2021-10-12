@@ -8,6 +8,7 @@ import org.nfl.big.data.bowl.entity.Tracking
 object TrackingDataExtractor {
 
   final val HOME: String = "home"
+  final val AWAY: String = "away"
 
   private def findEventByEventName(event: String, trackingRDD: RDD[Tracking]): RDD[Tracking] = {
 
@@ -32,9 +33,32 @@ object TrackingDataExtractor {
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
+  private def findAwayTeamEvent(event: String, playDirection: String, trackingRDD: RDD[Tracking]): RDD[Tracking] = {
+
+    val result: RDD[Tracking] =
+      trackingRDD.filter(
+        t => {
+          t.event.equalsIgnoreCase(event) &&
+            t.team.equalsIgnoreCase(HOME) &&
+            t.playDirection.equalsIgnoreCase(playDirection)
+        }
+      )
+
+    result.persist(StorageLevel.MEMORY_AND_DISK)
+
+  }
+
   def findHomeTeamEventToDF(event: String, playDirection: String, trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
 
     val eventRDD = findHomeTeamEvent(event, playDirection, trackingRDD)
+
+    spark
+      .createDataFrame(eventRDD)
+  }
+
+  def findAwayTeamEventToDF(event: String, playDirection: String, trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
+
+    val eventRDD = findAwayTeamEvent(event, playDirection, trackingRDD)
 
     spark
       .createDataFrame(eventRDD)
