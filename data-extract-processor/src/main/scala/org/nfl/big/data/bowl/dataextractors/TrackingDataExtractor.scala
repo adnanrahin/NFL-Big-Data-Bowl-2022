@@ -65,6 +65,7 @@ object TrackingDataExtractor {
   }
 
   def findEventByEventNameToDF(event: String, trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
+    
     val events: RDD[Tracking] = findEventByEventName(event, trackingRDD)
 
     spark
