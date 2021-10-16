@@ -1,16 +1,15 @@
-ummary of data
+## Summary of data
 The 2022 Big Data Bowl data contains Next Gen Stats player tracking, play, game, player, and PFF scouting data for all 2018-2020 Special Teams plays. Here, you'll find a summary of each data set in the 2022 Data Bowl, a list of key variables to join on, and a description of each variable.
+### File descriptions
+1. Game data: The games.csv contains the teams playing in each game. The key variable is gameId.
 
-File descriptions
-Game data: The games.csv contains the teams playing in each game. The key variable is gameId.
+2. Play data: The plays.csv file contains play-level information from each game. The key variables are gameId and playId.
 
-Play data: The plays.csv file contains play-level information from each game. The key variables are gameId and playId.
+3. Player data: The players.csv file contains player-level information from players that participated in any of the tracking data files. The key variable is nflId.
 
-Player data: The players.csv file contains player-level information from players that participated in any of the tracking data files. The key variable is nflId.
+4. Tracking data: Files tracking[season].csv contain player tracking data from season [season]. The key variables are gameId, playId, and nflId.
 
-Tracking data: Files tracking[season].csv contain player tracking data from season [season]. The key variables are gameId, playId, and nflId.
-
-PFF Scouting data: The PFFScoutingData.csv file contains play-level scouting information for each game. The key variables are gameId and playId.
+5. PFF Scouting data: The PFFScoutingData.csv file contains play-level scouting information for each game. The key variables are gameId and playId.
 
 ### Game data
 1. gameId: Game identifier, unique (numeric)
