@@ -45,7 +45,6 @@ object TrackingDataExtractor {
       )
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
-
   }
 
   def findHomeTeamEventToDF(event: String, playDirection: String, trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
