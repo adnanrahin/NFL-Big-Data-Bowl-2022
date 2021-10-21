@@ -82,4 +82,11 @@ object TrackingDataExtractor {
       .createDataFrame(events)
   }
 
+  def findTotalDistanceRunInEachGameToDf(trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
+
+    val distanceRDD: RDD[(String, Long)] = findTotalDistanceRunInEachGame(trackingRDD = trackingRDD)
+
+    spark.createDataFrame(distanceRDD)
+  }
+
 }
