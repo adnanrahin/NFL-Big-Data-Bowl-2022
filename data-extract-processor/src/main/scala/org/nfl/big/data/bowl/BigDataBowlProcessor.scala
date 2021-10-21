@@ -56,7 +56,9 @@ object BigDataBowlProcessor {
       .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
     dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
 
-
+    val totalDistanceCoverInEachGame = TrackingDataExtractor
+      .findTotalDistanceRunInEachGameToDf(trackingRDD = trackingRDD, spark = spark)
+    dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
 
     spark.close()
 
