@@ -10,17 +10,6 @@ object TrackingDataExtractor {
   final val HOME: String = "home"
   final val AWAY: String = "away"
 
-  private def findTotalDistanceRunInEachGame(trackingRDD: RDD[Tracking]): RDD[(String, Long)] = {
-
-    val result: RDD[(String, Long)] = trackingRDD
-      .groupBy(_.gameId)
-      .map {
-        track => (track._1, track._2.foldLeft(0L)(_ + _.dis.toLong))
-      }
-
-    result
-  }
-
   private def findEventByEventName(event: String, trackingRDD: RDD[Tracking]): RDD[Tracking] = {
 
     val events: RDD[Tracking] =
@@ -54,6 +43,17 @@ object TrackingDataExtractor {
             t.playDirection.equalsIgnoreCase(playDirection)
         }
       )
+
+    result.persist(StorageLevel.MEMORY_AND_DISK)
+  }
+
+  private def findTotalDistanceRunInEachGame(trackingRDD: RDD[Tracking]): RDD[(String, Long)] = {
+
+    val result: RDD[(String, Long)] = trackingRDD
+      .groupBy(_.gameId)
+      .map {
+        track => (track._1, track._2.foldLeft(0L)(_ + _.dis.toLong))
+      }
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
