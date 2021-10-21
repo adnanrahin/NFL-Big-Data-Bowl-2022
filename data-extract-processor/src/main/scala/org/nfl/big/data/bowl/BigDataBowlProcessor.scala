@@ -56,6 +56,8 @@ object BigDataBowlProcessor {
       .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
     dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
 
+
+
     spark.close()
 
   }

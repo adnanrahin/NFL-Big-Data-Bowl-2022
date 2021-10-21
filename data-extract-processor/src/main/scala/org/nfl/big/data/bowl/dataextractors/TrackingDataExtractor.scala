@@ -88,6 +88,7 @@ object TrackingDataExtractor {
 
     spark
       .createDataFrame(distanceRDD)
+      .toDF("gameId", "totalDistance")
   }
 
 }
