@@ -54,6 +54,7 @@ object TrackingDataExtractor {
       .map {
         track => (track._1, track._2.foldLeft(0L)(_ + _.dis.toLong))
       }
+      .sortBy(-_._2)
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
