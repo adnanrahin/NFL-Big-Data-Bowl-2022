@@ -49,18 +49,26 @@ object TrackingDataExtractor {
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
-  private def findTotalDistanceRunInEachGame(trackingRDD: RDD[Tracking]): RDD[(String, Double)] = {
+  private def findTotalDistanceRunInEachGame(trackingRDD: RDD[Tracking]): RDD[(String, String)] = {
 
-    val result: RDD[(String, Double)] = trackingRDD
+    val result: RDD[(String, String)] = trackingRDD
       .filter(track => isNumeric(track.dis))
       .map {
         track => (track.gameId, track.dis.toDouble)
       }
       .groupBy(_._1)
       .map {
-        track => (track._1, BigDecimal.apply(track._2.foldLeft(0.0)(_ + _._2)).setScale(2).toDouble)
+        track =>
+          (track._1,
+            BigDecimal
+              .apply(track._2.foldLeft(0.0)(_ + _._2))
+              .setScale(2, BigDecimal.RoundingMode.HALF_EVEN)
+              .toDouble)
       }
       .sortBy(-_._2)
+      .map {
+        kv => (kv._1, kv._2.toString)
+      }
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
@@ -91,7 +99,7 @@ object TrackingDataExtractor {
 
   def findTotalDistanceRunInEachGameToDf(trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
 
-    val distanceRDD: RDD[(String, Double)] = findTotalDistanceRunInEachGame(trackingRDD = trackingRDD)
+    val distanceRDD: RDD[(String, String)] = findTotalDistanceRunInEachGame(trackingRDD = trackingRDD)
 
     spark
       .createDataFrame(distanceRDD)
