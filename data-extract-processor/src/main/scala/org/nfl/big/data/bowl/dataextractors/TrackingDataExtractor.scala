@@ -53,12 +53,12 @@ object TrackingDataExtractor {
 
     val result: RDD[(String, Double)] = trackingRDD
       .filter(track => isNumeric(track.dis))
-      .map{
+      .map {
         track => (track.gameId, track.dis.toDouble)
       }
       .groupBy(_._1)
       .map {
-        track => (track._1, track._2.foldLeft(0.0)(_ + _._2))
+        track => (track._1, BigDecimal.apply(track._2.foldLeft(0.0)(_ + _._2)).setScale(2).toDouble)
       }
       .sortBy(-_._2)
 
