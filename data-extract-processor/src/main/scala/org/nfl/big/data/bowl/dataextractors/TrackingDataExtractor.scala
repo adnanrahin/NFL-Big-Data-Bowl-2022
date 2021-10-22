@@ -106,7 +106,7 @@ object TrackingDataExtractor {
       .toDF("gameId", "totalDistance")
   }
 
-  def isNumeric(num: String): Boolean = {
+  private def isNumeric(num: String): Boolean = {
 
     def isShort(aString: String): Boolean = Try(aString.toLong).isSuccess
 
