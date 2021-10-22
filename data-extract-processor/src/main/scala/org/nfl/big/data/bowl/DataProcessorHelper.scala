@@ -1,6 +1,6 @@
 package org.nfl.big.data.bowl
 
-class DataProcessorHelper {
+object DataProcessorHelper {
 
 
 }

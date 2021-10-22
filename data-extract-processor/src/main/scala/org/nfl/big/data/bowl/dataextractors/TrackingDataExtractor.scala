@@ -5,6 +5,8 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.entity.Tracking
 
+import scala.util.Try
+
 object TrackingDataExtractor {
 
   final val HOME: String = "home"
@@ -47,12 +49,16 @@ object TrackingDataExtractor {
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
-  private def findTotalDistanceRunInEachGame(trackingRDD: RDD[Tracking]): RDD[(String, Long)] = {
+  private def findTotalDistanceRunInEachGame(trackingRDD: RDD[Tracking]): RDD[(String, Double)] = {
 
-    val result: RDD[(String, Long)] = trackingRDD
-      .groupBy(_.gameId)
+    val result: RDD[(String, Double)] = trackingRDD
+      .filter(track => isNumeric(track.dis))
+      .map{
+        track => (track.gameId, track.dis.toDouble)
+      }
+      .groupBy(_._1)
       .map {
-        track => (track._1, track._2.foldLeft(0L)(_ + _.dis.toLong))
+        track => (track._1, track._2.foldLeft(0.0)(_ + _._2))
       }
       .sortBy(-_._2)
 
@@ -85,11 +91,27 @@ object TrackingDataExtractor {
 
   def findTotalDistanceRunInEachGameToDf(trackingRDD: RDD[Tracking], spark: SparkSession): DataFrame = {
 
-    val distanceRDD: RDD[(String, Long)] = findTotalDistanceRunInEachGame(trackingRDD = trackingRDD)
+    val distanceRDD: RDD[(String, Double)] = findTotalDistanceRunInEachGame(trackingRDD = trackingRDD)
 
     spark
       .createDataFrame(distanceRDD)
       .toDF("gameId", "totalDistance")
+  }
+
+  def isNumeric(num: String): Boolean = {
+
+    def isShort(aString: String): Boolean = Try(aString.toLong).isSuccess
+
+    def isInt(aString: String): Boolean = Try(aString.toInt).isSuccess
+
+    def isLong(aString: String): Boolean = Try(aString.toLong).isSuccess
+
+    def isDouble(aString: String): Boolean = Try(aString.toDouble).isSuccess
+
+    def isFloat(aString: String): Boolean = Try(aString.toFloat).isSuccess
+
+    if (isShort(num) || isInt(num) || isLong(num) || isDouble(num) || isFloat(num)) true
+    else false
   }
 
 }
