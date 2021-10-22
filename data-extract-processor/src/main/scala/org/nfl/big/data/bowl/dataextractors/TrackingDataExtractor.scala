@@ -62,7 +62,7 @@ object TrackingDataExtractor {
           (track._1,
             BigDecimal
               .apply(track._2.foldLeft(0.0)(_ + _._2))
-              .setScale(2, BigDecimal.RoundingMode.HALF_EVEN)
+              .setScale(6, BigDecimal.RoundingMode.HALF_EVEN)
               .toDouble)
       }
       .sortBy(-_._2)
