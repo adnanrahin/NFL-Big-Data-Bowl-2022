@@ -3,9 +3,8 @@ package org.nfl.big.data.bowl.dataextractors
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.storage.StorageLevel
+import org.nfl.big.data.bowl.DataProcessorHelper.isNumeric
 import org.nfl.big.data.bowl.entity.Tracking
-
-import scala.util.Try
 
 object TrackingDataExtractor {
 
@@ -106,20 +105,6 @@ object TrackingDataExtractor {
       .toDF("gameId", "totalDistance")
   }
 
-  private def isNumeric(num: String): Boolean = {
 
-    def isShort(aString: String): Boolean = Try(aString.toLong).isSuccess
-
-    def isInt(aString: String): Boolean = Try(aString.toInt).isSuccess
-
-    def isLong(aString: String): Boolean = Try(aString.toLong).isSuccess
-
-    def isDouble(aString: String): Boolean = Try(aString.toDouble).isSuccess
-
-    def isFloat(aString: String): Boolean = Try(aString.toFloat).isSuccess
-
-    if (isShort(num) || isInt(num) || isLong(num) || isDouble(num) || isFloat(num)) true
-    else false
-  }
 
 }
