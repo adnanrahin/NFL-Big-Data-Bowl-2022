@@ -2,7 +2,7 @@ package org.nfl.big.data.bowl
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
+import org.apache.spark.sql.SparkSession
 import org.nfl.big.data.bowl.constant.Constant
 import org.nfl.big.data.bowl.dataextractors.TrackingDataExtractor
 import org.nfl.big.data.bowl.dataloader._
@@ -38,42 +38,31 @@ object BigDataBowlProcessor {
 
     val touchdownDF = TrackingDataExtractor
       .findEventByEventNameToDF("touchdown", trackingRDD, spark)
-    dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
+    DataProcessorHelper.dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
 
     val homeTouchDownLeftDF = TrackingDataExtractor
       .findHomeTeamEventToDF("touchdown", "left", trackingRDD, spark)
-    dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
+    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
 
     val homeTouchDownRightDF = TrackingDataExtractor
       .findHomeTeamEventToDF("touchdown", "right", trackingRDD, spark)
-    dataWriter(dataFrame = homeTouchDownRightDF, dataPath = dataPath, directoryName = "hometeamtouchdownright")
+    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownRightDF, dataPath = dataPath, directoryName = "hometeamtouchdownright")
 
     val awayTouchDownLeftDF = TrackingDataExtractor
       .findAwayTeamEventToDF("touchdown", "left", trackingRDD, spark)
-    dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
+    DataProcessorHelper.dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
 
     val awayTouchDownRightDF = TrackingDataExtractor
       .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
-    dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
+    DataProcessorHelper.dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
 
     val totalDistanceCoverInEachGame = TrackingDataExtractor
       .findTotalDistanceRunInEachGameToDf(trackingRDD = trackingRDD, spark = spark)
-    dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
+    DataProcessorHelper.dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
 
     spark.close()
 
   }
 
-  def dataWriter(dataFrame: DataFrame, dataPath: String, directoryName: String): Unit = {
-
-    val destinationDirectory: String = dataPath + Constant.FILTER_DIR + "/" + directoryName
-
-    dataFrame.show(100)
-
-    dataFrame
-      .write
-      .mode(SaveMode.Overwrite)
-      .parquet(destinationDirectory)
-  }
 
 }
