@@ -105,6 +105,4 @@ object TrackingDataExtractor {
       .toDF("gameId", "totalDistance")
   }
 
-
-
 }
