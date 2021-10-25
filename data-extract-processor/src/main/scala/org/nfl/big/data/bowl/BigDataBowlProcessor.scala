@@ -8,6 +8,8 @@ import org.nfl.big.data.bowl.dataextractors.TrackingDataExtractor
 import org.nfl.big.data.bowl.dataloader._
 import org.nfl.big.data.bowl.entity._
 
+import java.lang.reflect.InvocationTargetException
+
 object BigDataBowlProcessor {
 
   def main(args: Array[String]): Unit = {
@@ -37,40 +39,42 @@ object BigDataBowlProcessor {
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
     args(1) match {
+      case "1" => {
+        val touchdownDF = TrackingDataExtractor
+          .findEventByEventNameToDF("touchdown", trackingRDD, spark)
+        DataProcessorHelper.dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
+      }
+      case "2" => {
+        val homeTouchDownLeftDF = TrackingDataExtractor
+          .findHomeTeamEventToDF("touchdown", "left", trackingRDD, spark)
+        DataProcessorHelper.dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
+      }
+      case "3" => {
+        val homeTouchDownRightDF = TrackingDataExtractor
+          .findHomeTeamEventToDF("touchdown", "right", trackingRDD, spark)
+        DataProcessorHelper.dataWriter(dataFrame = homeTouchDownRightDF, dataPath = dataPath, directoryName = "hometeamtouchdownright")
+      }
+      case "4" => {
+        val awayTouchDownLeftDF = TrackingDataExtractor
+          .findAwayTeamEventToDF("touchdown", "left", trackingRDD, spark)
+        DataProcessorHelper.dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
+      }
+      case "5" => {
+        val awayTouchDownRightDF = TrackingDataExtractor
+          .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
+        DataProcessorHelper.dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
+      }
+      case "6" => {
+        val totalDistanceCoverInEachGame = TrackingDataExtractor
+          .findTotalDistanceRunInEachGameToDf(trackingRDD = trackingRDD, spark = spark)
+        DataProcessorHelper.dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
+      }
       case _ => {
         try {
-          case "1" => {
-            val touchdownDF = TrackingDataExtractor
-              .findEventByEventNameToDF("touchdown", trackingRDD, spark)
-            DataProcessorHelper.dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
-          }
-          case "2" => {
-            val homeTouchDownLeftDF = TrackingDataExtractor
-              .findHomeTeamEventToDF("touchdown", "left", trackingRDD, spark)
-            DataProcessorHelper.dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
-          }
-          case "3" => {
-            val homeTouchDownRightDF = TrackingDataExtractor
-              .findHomeTeamEventToDF("touchdown", "right", trackingRDD, spark)
-            DataProcessorHelper.dataWriter(dataFrame = homeTouchDownRightDF, dataPath = dataPath, directoryName = "hometeamtouchdownright")
-          }
-          case "4" => {
-            val awayTouchDownLeftDF = TrackingDataExtractor
-              .findAwayTeamEventToDF("touchdown", "left", trackingRDD, spark)
-            DataProcessorHelper.dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
-          }
-          case "5" => {
-            val awayTouchDownRightDF = TrackingDataExtractor
-              .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
-            DataProcessorHelper.dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
-          }
-          case "6" => {
-            val totalDistanceCoverInEachGame = TrackingDataExtractor
-              .findTotalDistanceRunInEachGameToDf(trackingRDD = trackingRDD, spark = spark)
-            DataProcessorHelper.dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
-          }
+
         } catch {
           case e: ArrayIndexOutOfBoundsException => println("Array index out of bound, args(1) is missing from programs argument")
+          case e: InvocationTargetException => println("Missing parameters from run arguments")
         } finally {
           spark.close()
         }
