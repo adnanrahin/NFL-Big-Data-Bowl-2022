@@ -36,29 +36,46 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
-    val touchdownDF = TrackingDataExtractor
-      .findEventByEventNameToDF("touchdown", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
-
-    val homeTouchDownLeftDF = TrackingDataExtractor
-      .findHomeTeamEventToDF("touchdown", "left", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
-
-    val homeTouchDownRightDF = TrackingDataExtractor
-      .findHomeTeamEventToDF("touchdown", "right", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownRightDF, dataPath = dataPath, directoryName = "hometeamtouchdownright")
-
-    val awayTouchDownLeftDF = TrackingDataExtractor
-      .findAwayTeamEventToDF("touchdown", "left", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
-
-    val awayTouchDownRightDF = TrackingDataExtractor
-      .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
-
-    val totalDistanceCoverInEachGame = TrackingDataExtractor
-      .findTotalDistanceRunInEachGameToDf(trackingRDD = trackingRDD, spark = spark)
-    DataProcessorHelper.dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
+    args(1) match {
+      case _ => {
+        try {
+          case "1" => {
+            val touchdownDF = TrackingDataExtractor
+              .findEventByEventNameToDF("touchdown", trackingRDD, spark)
+            DataProcessorHelper.dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
+          }
+          case "2" => {
+            val homeTouchDownLeftDF = TrackingDataExtractor
+              .findHomeTeamEventToDF("touchdown", "left", trackingRDD, spark)
+            DataProcessorHelper.dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
+          }
+          case "3" => {
+            val homeTouchDownRightDF = TrackingDataExtractor
+              .findHomeTeamEventToDF("touchdown", "right", trackingRDD, spark)
+            DataProcessorHelper.dataWriter(dataFrame = homeTouchDownRightDF, dataPath = dataPath, directoryName = "hometeamtouchdownright")
+          }
+          case "4" => {
+            val awayTouchDownLeftDF = TrackingDataExtractor
+              .findAwayTeamEventToDF("touchdown", "left", trackingRDD, spark)
+            DataProcessorHelper.dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
+          }
+          case "5" => {
+            val awayTouchDownRightDF = TrackingDataExtractor
+              .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
+            DataProcessorHelper.dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
+          }
+          case "6" => {
+            val totalDistanceCoverInEachGame = TrackingDataExtractor
+              .findTotalDistanceRunInEachGameToDf(trackingRDD = trackingRDD, spark = spark)
+            DataProcessorHelper.dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
+          }
+        } catch {
+          case e: ArrayIndexOutOfBoundsException => println("Array index out of bound, args(1) is missing from programs argument")
+        } finally {
+          spark.close()
+        }
+      }
+    }
 
     spark.close()
 
