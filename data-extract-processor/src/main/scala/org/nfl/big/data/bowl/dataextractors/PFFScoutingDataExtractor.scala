@@ -9,24 +9,25 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, Double)] = {
+  def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
-    val result: RDD[(String, Double)] =
+    val result: RDD[(String, String)] =
 
       pffScoutingRDD.filter(pf => !pf.hangTime.equalsIgnoreCase(NA))
         .filter(t => isNumeric(t.hangTime))
         .map(pf => (pf.gameId, pf.hangTime.toDouble))
         .groupBy(_._1)
         .map {
-          t =>
-            (
-              t._1, BigDecimal
+          t => {
+            (t._1
+              , BigDecimal
               .apply(t._2.foldLeft(0.0)(_ + _._2))
               .setScale(6, BigDecimal.RoundingMode.HALF_EVEN)
-              .toDouble
-            )
+              .toDouble)
+          }
         }
         .sortBy(_._2)
+        .map(kv => (kv._1, kv._2.toString))
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
