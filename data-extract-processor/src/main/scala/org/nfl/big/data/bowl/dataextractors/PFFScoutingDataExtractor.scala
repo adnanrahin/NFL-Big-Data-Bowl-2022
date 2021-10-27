@@ -1,6 +1,7 @@
 package org.nfl.big.data.bowl.dataextractors
 
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.DataProcessorHelper.isNumeric
 import org.nfl.big.data.bowl.entity.PFFScoutingData
@@ -9,7 +10,7 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
+  private def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val result: RDD[(String, String)] =
 
@@ -32,5 +33,13 @@ object PFFScoutingDataExtractor {
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
+  def findTotalDistanceRunInEachGameToDf(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
+
+    val distanceRDD: RDD[(String, String)] = findTotalHangTimeInEachGame(pffScoutingRDD = pffScoutingRDD)
+
+    spark
+      .createDataFrame(distanceRDD)
+      .toDF("gameId", "totalHangingTime")
+  }
 
 }
