@@ -12,6 +12,11 @@ object PFFScoutingDataExtractor {
 
   private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): Unit = {
 
+    val result =
+      pffScoutingRDD.filter(pf => !pf.hangTime.equalsIgnoreCase(NA))
+        .map(pf => (pf.gameId, pf.puntRushers))
+        .groupBy(_._1)
+
   }
 
   private def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
