@@ -22,7 +22,6 @@ object PFFScoutingDataExtractor {
   private def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val result: RDD[(String, String)] =
-
       pffScoutingRDD.filter(pf => !pf.hangTime.equalsIgnoreCase(NA))
         .filter(t => isNumeric(t.hangTime))
         .map(pf => (pf.gameId, pf.hangTime.toDouble))
