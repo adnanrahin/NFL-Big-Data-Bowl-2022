@@ -10,6 +10,10 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
+  private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): Unit = {
+
+  }
+
   private def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val result: RDD[(String, String)] =
