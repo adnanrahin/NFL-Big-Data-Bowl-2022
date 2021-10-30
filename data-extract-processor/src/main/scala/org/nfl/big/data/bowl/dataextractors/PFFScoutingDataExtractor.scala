@@ -10,13 +10,22 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): Unit = {
+  private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, List[String])] = {
 
-    val result =
+    val result: RDD[(String, List[String])] =
       pffScoutingRDD.filter(pf => !pf.hangTime.equalsIgnoreCase(NA))
         .map(pf => (pf.gameId, pf.puntRushers))
         .groupBy(_._1)
+        .map {
+          t => {
+            (t._1, t._2.toList)
+          }
+        }
+        .map {
+          t => (t._1, t._2.map(f => f._2))
+        }
 
+    result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
   private def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
