@@ -28,7 +28,7 @@ object BigDataBowlTestProcessor {
 
     val pffScoutingRDD: RDD[PFFScoutingData] = pffScoutingDataLoader.loadRDD()
 
-    val pfRDD = PFFScoutingDataExtractor.findTotalDistanceRunInEachGameToDf(pffScoutingRDD, spark = spark)
+    val pfRDD = PFFScoutingDataExtractor.extractPuntRushers(pffScoutingRDD, spark = spark)
     
   }
 
