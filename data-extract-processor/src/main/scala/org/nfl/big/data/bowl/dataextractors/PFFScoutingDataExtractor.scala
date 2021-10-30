@@ -13,7 +13,7 @@ object PFFScoutingDataExtractor {
   def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): RDD[(String, List[String])] = {
 
     val result: RDD[(String, List[String])] =
-      pffScoutingRDD.filter(pf => !pf.hangTime.equalsIgnoreCase(NA))
+      pffScoutingRDD
         .map(pf => (pf.gameId, pf.puntRushers))
         .groupBy(_._1)
         .map {
@@ -22,10 +22,13 @@ object PFFScoutingDataExtractor {
           }
         }
         .map {
-          t => (t._1, t._2.map(f => f._2))
+          t => {
+            (t._1,
+              t._2.filter(f => !f._2.equalsIgnoreCase(NA))
+                .map(f => f._2)
+            )
+          }
         }
-
-    result.foreach(f => println(f._1 + " => " + f._2))
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
