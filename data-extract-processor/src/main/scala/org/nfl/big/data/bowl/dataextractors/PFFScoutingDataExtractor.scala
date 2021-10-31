@@ -64,7 +64,7 @@ object PFFScoutingDataExtractor {
       .toDF("gameId", "totalHangingTime")
   }
 
-  def puntRushersToDF(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): Unit = {
+  def puntRushersToDF(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
 
     val puntRushers = extractPuntRushers(pffScoutingRDD)
 
