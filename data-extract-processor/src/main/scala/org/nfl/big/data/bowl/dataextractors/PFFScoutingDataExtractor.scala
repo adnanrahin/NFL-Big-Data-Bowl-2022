@@ -10,7 +10,7 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): RDD[(String, List[String])] = {
+  def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, List[String])] = {
 
     val result: RDD[(String, List[String])] =
       pffScoutingRDD
@@ -62,6 +62,16 @@ object PFFScoutingDataExtractor {
     spark
       .createDataFrame(distanceRDD)
       .toDF("gameId", "totalHangingTime")
+  }
+
+  def puntRushersToDF(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): Unit = {
+
+    val puntRushers = extractPuntRushers(pffScoutingRDD)
+
+    spark
+      .createDataFrame(puntRushers)
+      .toDF("gameID", "PuntRushers")
+
   }
 
 }
