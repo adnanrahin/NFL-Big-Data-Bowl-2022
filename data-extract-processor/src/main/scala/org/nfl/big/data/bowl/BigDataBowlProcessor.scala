@@ -74,6 +74,11 @@ object BigDataBowlProcessor {
           .findTotalDistanceRunInEachGameToDf(pffScoutingRDD = pffScoutingRDD, spark = spark)
         DataProcessorHelper.dataWriter(totalHangingTimeInEachGame, dataPath, directoryName = "totalhangingtime")
       }
+      case "8" => {
+        val puntRushers = PFFScoutingDataExtractor
+          .puntRushersToDF(pffScoutingRDD = pffScoutingRDD, spark = spark)
+        DataProcessorHelper.dataWriter(puntRushers, dataPath, directoryName = "totalhangingtime")
+      }
       case _ => {
         try {
 

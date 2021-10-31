@@ -10,7 +10,7 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, List[String])] = {
+  private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, List[String])] = {
 
     val result: RDD[(String, List[String])] =
       pffScoutingRDD
