@@ -83,8 +83,8 @@ object BigDataBowlProcessor {
         try {
 
         } catch {
-          case e: ArrayIndexOutOfBoundsException => println("Array index out of bound, args(1) is missing from programs argument")
-          case e: InvocationTargetException => println("Missing parameters from run arguments")
+          case exception: ArrayIndexOutOfBoundsException => println("Array index out of bound, args(1) is missing from programs argument " + exception)
+          case exception: InvocationTargetException => println("Missing parameters from run arguments " + exception)
         } finally {
           spark.close()
         }
