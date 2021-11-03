@@ -77,7 +77,7 @@ object BigDataBowlProcessor {
       case "8" => {
         val puntRushers = PFFScoutingDataExtractor
           .puntRushersToDF(pffScoutingRDD = pffScoutingRDD, spark = spark)
-        DataProcessorHelper.dataWriter(puntRushers, dataPath, directoryName = "totalhangingtime")
+        DataProcessorHelper.dataWriter(puntRushers, dataPath, directoryName = "extractpuntrushers")
       }
       case _ => {
         try {

@@ -70,7 +70,7 @@ object PFFScoutingDataExtractor {
 
     spark
       .createDataFrame(puntRushers)
-      .toDF("gameID", "PuntRushers")
+      .toDF("gameID", "puntRushers")
   }
 
 }
