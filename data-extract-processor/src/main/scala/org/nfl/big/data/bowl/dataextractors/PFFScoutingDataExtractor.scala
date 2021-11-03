@@ -10,7 +10,7 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, List[String])] = {
+  def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, List[String])] = {
 
     val result: RDD[(String, List[String])] =
       pffScoutingRDD
@@ -29,6 +29,8 @@ object PFFScoutingDataExtractor {
             )
           }
         }
+
+    result.foreach(f => println(f._1 + " => " + f._2))
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
