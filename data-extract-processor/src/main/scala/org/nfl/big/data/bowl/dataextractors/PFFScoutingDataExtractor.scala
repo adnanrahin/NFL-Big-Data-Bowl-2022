@@ -25,12 +25,17 @@ object PFFScoutingDataExtractor {
           t => {
             (t._1,
               t._2.filter(f => !f._2.equalsIgnoreCase(NA))
-                .map(f => f._2)
+                .map {
+                  f => f._2.replace(";", ",")
+                }.mkString(",")
+                .split(",")
+                .toList
+                .map(str => str.trim)
             )
           }
         }
 
-    result.foreach(f => println(f._1 + " => " + f._2))
+    //result.foreach(f => println(f._1 + " => " + f._2))
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
