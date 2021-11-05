@@ -9,6 +9,9 @@ import org.nfl.big.data.bowl.entity.PFFScoutingData
 object PFFScoutingDataExtractor {
 
   final val NA = "NA"
+  final val PIPE_DELIMITER = "|"
+  final val SEMICOLON_DELIMITER = ";"
+  final val COMMA_DELIMITER = ","
 
   private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
@@ -26,11 +29,11 @@ object PFFScoutingDataExtractor {
             (t._1,
               t._2.filter(f => !f._2.equalsIgnoreCase(NA))
                 .map {
-                  f => f._2.replace(";", ",")
-                }.mkString(",")
-                .split(",")
+                  f => f._2.replace(SEMICOLON_DELIMITER, COMMA_DELIMITER)
+                }.mkString(COMMA_DELIMITER)
+                .split(COMMA_DELIMITER)
                 .toList
-                .map(str => str.trim).mkString(",")
+                .map(str => str.trim).mkString(PIPE_DELIMITER)
             )
           }
         }
