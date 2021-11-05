@@ -4,14 +4,13 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.DataProcessorHelper.isNumeric
+import org.nfl.big.data.bowl.constant.Constant.{COMMA_DELIMITER, PIPE_DELIMITER, SEMICOLON_DELIMITER}
 import org.nfl.big.data.bowl.entity.PFFScoutingData
 
 object PFFScoutingDataExtractor {
 
   final val NA = "NA"
-  final val PIPE_DELIMITER = "|"
-  final val SEMICOLON_DELIMITER = ";"
-  final val COMMA_DELIMITER = ","
+
 
   private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 

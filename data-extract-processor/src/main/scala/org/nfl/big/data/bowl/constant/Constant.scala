@@ -8,5 +8,8 @@ object Constant {
   final val PLAYS = "plays.csv"
   final val TRACKING = "tracking\\*"
   final val FILTER_DIR = "filterdata"
+  final val PIPE_DELIMITER = "|"
+  final val SEMICOLON_DELIMITER = ";"
+  final val COMMA_DELIMITER = ","
 
 }
