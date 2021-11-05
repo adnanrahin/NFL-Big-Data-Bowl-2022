@@ -10,9 +10,9 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, List[String])] = {
+  private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
-    val result: RDD[(String, List[String])] =
+    val result: RDD[(String, String)] =
       pffScoutingRDD
         .map(pf => (pf.gameId, pf.puntRushers))
         .groupBy(_._1)
@@ -30,12 +30,11 @@ object PFFScoutingDataExtractor {
                 }.mkString(",")
                 .split(",")
                 .toList
-                .map(str => str.trim)
+                .map(str => str.trim).mkString(",")
             )
           }
         }
 
-    //result.foreach(f => println(f._1 + " => " + f._2))
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
