@@ -11,7 +11,6 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-
   private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val result: RDD[(String, String)] =
@@ -36,7 +35,6 @@ object PFFScoutingDataExtractor {
             )
           }
         }
-
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
