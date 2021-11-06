@@ -39,6 +39,15 @@ object PFFScoutingDataExtractor {
     result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
+  def puntRushersToDF(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
+
+    val puntRushers = extractPuntRushers(pffScoutingRDD)
+
+    spark
+      .createDataFrame(puntRushers)
+      .toDF("gameID", "puntRushers")
+  }
+
   private def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val result: RDD[(String, String)] =
@@ -68,15 +77,6 @@ object PFFScoutingDataExtractor {
     spark
       .createDataFrame(distanceRDD)
       .toDF("gameId", "totalHangingTime")
-  }
-
-  def puntRushersToDF(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
-
-    val puntRushers = extractPuntRushers(pffScoutingRDD)
-
-    spark
-      .createDataFrame(puntRushers)
-      .toDF("gameID", "puntRushers")
   }
 
 }
