@@ -38,6 +38,10 @@ object BigDataBowlProcessor {
     val playsRDD: RDD[Plays] = playsDataLoader.loadRDD()
     val trackingRDD: RDD[Tracking] = trackingDataLoader.loadRDD()
 
+    val pffScoutingDataExtractor: PFFScoutingDataExtractor = new PFFScoutingDataExtractor(pffScoutingRDD)
+    val trackingDataExtractor: TrackingDataExtractor = new TrackingDataExtractor(trackingRDD)
+
+
     args(1) match {
       case "1" => {
         val touchdownDF = TrackingDataExtractor
