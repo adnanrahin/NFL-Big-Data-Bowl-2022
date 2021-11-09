@@ -11,14 +11,43 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  private def kickDirection(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
+  def kickDirection(pffScoutingRDD: RDD[PFFScoutingData]) = {
 
     val filterData = pffScoutingRDD
-      .filter(t => t.kickDirectionIntended.equalsIgnoreCase(NA) && t.kickDirectionActual.equalsIgnoreCase(NA))
+      .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NA) && !t.kickDirectionActual.equalsIgnoreCase(NA))
 
-    val result: RDD[(String, String)] =
+    val result =
       filterData.map(t => (t.gameId, t.kickDirectionActual, t.kickDirectionIntended))
         .groupBy(t => t._1)
+        .map(t => (t._1, t._2.toList))
+        .map {
+          t =>
+            (
+              t._1, t._2.map {
+              val valueMap: Map[String, Long] = Map(
+                "L" -> 0, "C" -> 0, "R" -> 0
+              )
+              f => {
+                val actual = f._2
+                val intended = f._3
+
+                if (!actual.equalsIgnoreCase(intended)) {
+                  println("NOT COMING")
+                  intended match {
+                    case "L" => valueMap.updated("L", valueMap("L") + 1)
+                    case "R" => valueMap.updated("R", valueMap("R") + 1)
+                    case "C" => valueMap.updated("C", valueMap("C") + 1)
+                  }
+                }
+                valueMap.map(kv => (kv._1, kv._2))
+              }
+            }
+            )
+        }
+
+
+    //result.foreach(println)
+
     result
   }
 
