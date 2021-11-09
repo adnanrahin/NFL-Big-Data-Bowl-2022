@@ -17,8 +17,9 @@ object PFFScoutingDataExtractor {
       .filter(t => t.kickDirectionIntended.equalsIgnoreCase(NA) && t.kickDirectionActual.equalsIgnoreCase(NA))
 
     val result: RDD[(String, String)] =
-      filterData
-
+      filterData.map(t => (t.gameId, t.kickDirectionActual, t.kickDirectionIntended))
+        .groupBy(t => t._1)
+    result
   }
 
   private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
