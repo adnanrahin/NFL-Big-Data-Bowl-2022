@@ -21,32 +21,36 @@ object PFFScoutingDataExtractor {
         .groupBy(t => t._1)
         .map(t => (t._1, t._2.toList))
         .map {
-          t =>
+          t =>val valueMap: Map[String, Long] = Map(
+            "L" -> 0, "C" -> 0, "R" -> 0
+          )
             (
               t._1, t._2.map {
-              val valueMap: Map[String, Long] = Map(
-                "L" -> 0, "C" -> 0, "R" -> 0
-              )
+
+
               f => {
                 val actual = f._2
                 val intended = f._3
 
                 if (!actual.equalsIgnoreCase(intended)) {
-                  println("NOT COMING")
+
                   intended match {
                     case "L" => valueMap.updated("L", valueMap("L") + 1)
                     case "R" => valueMap.updated("R", valueMap("R") + 1)
                     case "C" => valueMap.updated("C", valueMap("C") + 1)
                   }
                 }
-                valueMap.map(kv => (kv._1, kv._2))
+                /*val ltr = valueMap.toList
+                val list = ltr.map(t => (t._1 + " " + t._2)).mkString(PIPE_DELIMITER)
+                list*/
+                valueMap
               }
             }
             )
         }
 
 
-    //result.foreach(println)
+    result.foreach(println)
 
     result
   }
