@@ -49,9 +49,8 @@ object PFFScoutingDataExtractor {
             )
         }
 
-
     result.foreach(println)
-
+    
     result
   }
 
