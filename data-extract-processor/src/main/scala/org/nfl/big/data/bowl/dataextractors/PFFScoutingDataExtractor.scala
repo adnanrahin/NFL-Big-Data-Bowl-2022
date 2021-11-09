@@ -11,9 +11,13 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  private def kickDirection(): RDD[(String, Map[String, String])] = {
+  private def kickDirection(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
-    
+    val filterData = pffScoutingRDD
+      .filter(t => t.kickDirectionIntended.equalsIgnoreCase(NA) && t.kickDirectionActual.equalsIgnoreCase(NA))
+
+    val result: RDD[(String, String)] =
+      filterData
 
   }
 
