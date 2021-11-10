@@ -17,7 +17,8 @@ object PFFScoutingDataExtractor {
       .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NA) && !t.kickDirectionActual.equalsIgnoreCase(NA))
 
     val result =
-      filterData.map(t => (t.gameId, t.kickDirectionActual, t.kickDirectionIntended))
+      filterData
+        .map(t => (t.gameId, t.kickDirectionActual, t.kickDirectionIntended))
         .groupBy(t => t._1)
         .map {
           t =>
