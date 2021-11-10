@@ -21,9 +21,10 @@ object PFFScoutingDataExtractor {
         .groupBy(t => t._1)
         .map(t => (t._1, t._2.toList))
         .map {
-          t =>val valueMap: Map[String, Long] = Map(
-            "L" -> 0, "C" -> 0, "R" -> 0
-          )
+          t =>
+            val valueMap: Map[String, Long] = Map(
+              "L" -> 0, "C" -> 0, "R" -> 0
+            )
             (
               t._1, t._2.map {
 
@@ -50,7 +51,7 @@ object PFFScoutingDataExtractor {
         }
 
     result.foreach(println)
-    
+
     result
   }
 
