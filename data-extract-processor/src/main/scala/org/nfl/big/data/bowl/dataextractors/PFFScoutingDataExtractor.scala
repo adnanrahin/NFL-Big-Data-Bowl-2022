@@ -19,36 +19,33 @@ object PFFScoutingDataExtractor {
     val result =
       filterData.map(t => (t.gameId, t.kickDirectionActual, t.kickDirectionIntended))
         .groupBy(t => t._1)
-        .map(t => (t._1, t._2.toList))
         .map {
+
           t =>
-            val valueMap: Map[String, Long] = Map(
-              "L" -> 0, "C" -> 0, "R" -> 0
-            )
-            (
-              t._1, t._2.map {
+            (t._1,
+              t._2.toList.filter(t => !t._2.equalsIgnoreCase(t._3)).map(f => (f._2, f._3)))
 
-
-              f => {
-                val actual = f._2
-                val intended = f._3
-
-                if (!actual.equalsIgnoreCase(intended)) {
-
-                  intended match {
-                    case "L" => valueMap.updated("L", valueMap("L") + 1)
-                    case "R" => valueMap.updated("R", valueMap("R") + 1)
-                    case "C" => valueMap.updated("C", valueMap("C") + 1)
-                  }
-                }
-                /*val ltr = valueMap.toList
-                val list = ltr.map(t => (t._1 + " " + t._2)).mkString(PIPE_DELIMITER)
-                list*/
-                valueMap
-              }
-            }
-            )
         }
+        .filter(t => t._2.nonEmpty)
+    /*.map {
+      t =>
+        (t._1,
+          t._2.map(f => {
+
+            val actual = f._2
+            val intended = f._3
+
+            if (!actual.equalsIgnoreCase(intended)) {
+
+
+
+            }
+
+          }
+
+          )
+        )
+    }*/
 
     result.foreach(println)
 
