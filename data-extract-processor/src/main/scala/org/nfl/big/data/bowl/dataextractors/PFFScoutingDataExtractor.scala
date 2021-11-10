@@ -26,9 +26,9 @@ object PFFScoutingDataExtractor {
                 .toList
                 .filter(t => !t._2.equalsIgnoreCase(t._3))
                 .map(f => (f._2, f._3))
-              flatMap {
-                t => t._1 :: t._2 :: Nil
-              }
+                .flatMap {
+                  t => t._1 :: t._2 :: Nil
+                }
             )
         }
         .filter(t => t._2.nonEmpty)
