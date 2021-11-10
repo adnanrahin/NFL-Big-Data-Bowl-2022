@@ -20,32 +20,18 @@ object PFFScoutingDataExtractor {
       filterData.map(t => (t.gameId, t.kickDirectionActual, t.kickDirectionIntended))
         .groupBy(t => t._1)
         .map {
-
           t =>
             (t._1,
-              t._2.toList.filter(t => !t._2.equalsIgnoreCase(t._3)).map(f => (f._2, f._3)))
-
+              t._2
+                .toList
+                .filter(t => !t._2.equalsIgnoreCase(t._3))
+                .map(f => (f._2, f._3))
+              flatMap {
+                t => t._1 :: t._2 :: Nil
+              }
+            )
         }
         .filter(t => t._2.nonEmpty)
-    /*.map {
-      t =>
-        (t._1,
-          t._2.map(f => {
-
-            val actual = f._2
-            val intended = f._3
-
-            if (!actual.equalsIgnoreCase(intended)) {
-
-
-
-            }
-
-          }
-
-          )
-        )
-    }*/
 
     result.foreach(println)
 
