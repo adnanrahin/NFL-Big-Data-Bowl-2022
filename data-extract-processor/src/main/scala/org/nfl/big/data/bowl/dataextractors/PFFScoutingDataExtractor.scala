@@ -16,7 +16,7 @@ object PFFScoutingDataExtractor {
     val filterData = pffScoutingRDD
       .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NA) && !t.kickDirectionActual.equalsIgnoreCase(NA))
 
-    val result =
+    val result: RDD[(String, String)] =
       filterData
         .map(t => (t.gameId, t.kickDirectionActual, t.kickDirectionIntended))
         .groupBy(t => t._1)
@@ -43,9 +43,7 @@ object PFFScoutingDataExtractor {
         }
         .filter(t => t._2.nonEmpty)
 
-    result.foreach(println)
-
-    result
+    result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
   private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
