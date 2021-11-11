@@ -80,6 +80,11 @@ object BigDataBowlProcessor {
           .puntRushersToDF(pffScoutingRDD = pffScoutingRDD, spark = spark)
         DataProcessorHelper.dataWriter(puntRushers, dataPath, directoryName = "extractpuntrushers")
       }
+      case "9" => {
+        val kickDirectionMissMatch = PFFScoutingDataExtractor
+          .kickDirectionMissMatchExtractToDf(pffScoutingRDD = pffScoutingRDD, spark = spark)
+        DataProcessorHelper.dataWriter(kickDirectionMissMatch, dataPath, directoryName = "kickdirectionmissmatch")
+      }
       case _ => {
         try {
 
