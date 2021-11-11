@@ -4,14 +4,14 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.DataProcessorHelper.isNumeric
-import org.nfl.big.data.bowl.constant.Constant.{COMMA_DELIMITER, PIPE_DELIMITER, SEMICOLON_DELIMITER}
+import org.nfl.big.data.bowl.constant.Constant.{COLON_DELIMITER, COMMA_DELIMITER, PIPE_DELIMITER, SEMICOLON_DELIMITER}
 import org.nfl.big.data.bowl.entity.PFFScoutingData
 
 object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  def kickDirection(pffScoutingRDD: RDD[PFFScoutingData]) = {
+  def kickDirection(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val filterData = pffScoutingRDD
       .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NA) && !t.kickDirectionActual.equalsIgnoreCase(NA))
@@ -29,7 +29,16 @@ object PFFScoutingDataExtractor {
                 .map(f => (f._2, f._3))
                 .flatMap {
                   t => t._1 :: t._2 :: Nil
-                }
+                }.mkString
+                .groupBy(identity)
+                .mapValues(_.length)
+                .toList
+                .map {
+                  str =>
+                    val kickDirection = str._1
+                    val count = str._2
+                    s"$kickDirection $COLON_DELIMITER $count"
+                }.mkString(PIPE_DELIMITER)
             )
         }
         .filter(t => t._2.nonEmpty)

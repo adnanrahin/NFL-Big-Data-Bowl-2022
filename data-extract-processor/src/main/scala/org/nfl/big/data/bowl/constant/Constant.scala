@@ -11,5 +11,6 @@ object Constant {
   final val PIPE_DELIMITER = "|"
   final val SEMICOLON_DELIMITER = ";"
   final val COMMA_DELIMITER = ","
+  final val COLON_DELIMITER = ":"
 
 }
