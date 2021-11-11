@@ -11,7 +11,7 @@ object PFFScoutingDataExtractor {
 
   final val NA = "NA"
 
-  def kickDirection(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
+  private def kickDirectionMisMatchExtract(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val filterData = pffScoutingRDD
       .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NA) && !t.kickDirectionActual.equalsIgnoreCase(NA))
@@ -44,6 +44,15 @@ object PFFScoutingDataExtractor {
         .filter(t => t._2.nonEmpty)
 
     result.persist(StorageLevel.MEMORY_AND_DISK)
+  }
+
+  def kickDirectionMisMatchExtractToDf(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
+
+    val distanceRDD: RDD[(String, String)] = kickDirectionMisMatchExtract(pffScoutingRDD = pffScoutingRDD)
+
+    spark
+      .createDataFrame(distanceRDD)
+      .toDF("gameId", "KickDirections")
   }
 
   private def extractPuntRushers(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
