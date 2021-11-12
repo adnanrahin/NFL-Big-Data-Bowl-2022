@@ -29,7 +29,8 @@ object PFFScoutingDataExtractor {
                 .map(f => (f._2, f._3))
                 .flatMap {
                   t => t._1 :: t._2 :: Nil
-                }.mkString
+                }
+                .mkString
                 .groupBy(identity)
                 .mapValues(_.length)
                 .toList
