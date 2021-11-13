@@ -71,7 +71,7 @@ object PFFScoutingDataExtractor {
         .map {
           t => {
             (t._1,
-              t._2.filter(f => !f._2.equalsIgnoreCase(NA))
+              t._2.filter(f => !f._2.equalsIgnoreCase(NOT_AVAILABLE))
                 .map {
                   f => f._2.replace(SEMICOLON_DELIMITER, COMMA_DELIMITER)
                 }.mkString(COMMA_DELIMITER)
@@ -97,7 +97,7 @@ object PFFScoutingDataExtractor {
   private def findTotalHangTimeInEachGame(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val result: RDD[(String, String)] =
-      pffScoutingRDD.filter(pf => !pf.hangTime.equalsIgnoreCase(NA))
+      pffScoutingRDD.filter(pf => !pf.hangTime.equalsIgnoreCase(NOT_AVAILABLE))
         .filter(t => isNumeric(t.hangTime))
         .map(pf => (pf.gameId, pf.hangTime.toDouble))
         .groupBy(_._1)
