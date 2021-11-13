@@ -4,17 +4,18 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.storage.StorageLevel
 import org.nfl.big.data.bowl.DataProcessorHelper.isNumeric
-import org.nfl.big.data.bowl.constant.Constant.{COLON_DELIMITER, COMMA_DELIMITER, PIPE_DELIMITER, SEMICOLON_DELIMITER}
+import org.nfl.big.data.bowl.constant.Constant._
 import org.nfl.big.data.bowl.entity.PFFScoutingData
 
-object PFFScoutingDataExtractor {
+import javax.print.attribute.standard.MediaSize.NA
 
-  final val NA = "NA"
+object PFFScoutingDataExtractor {
 
   private def kickDirectionMissMatchExtract(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val filterData = pffScoutingRDD
-      .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NA) && !t.kickDirectionActual.equalsIgnoreCase(NA))
+      .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NOT_AVAILABLE)
+        && !t.kickDirectionActual.equalsIgnoreCase(NOT_AVAILABLE))
 
     val result: RDD[(String, String)] =
       filterData

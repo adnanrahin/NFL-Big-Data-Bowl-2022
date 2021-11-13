@@ -12,5 +12,6 @@ object Constant {
   final val SEMICOLON_DELIMITER = ";"
   final val COMMA_DELIMITER = ","
   final val COLON_DELIMITER = ":"
+  final val NOT_AVAILABLE = "NA"
 
 }
