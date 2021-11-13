@@ -7,8 +7,6 @@ import org.nfl.big.data.bowl.DataProcessorHelper.isNumeric
 import org.nfl.big.data.bowl.constant.Constant._
 import org.nfl.big.data.bowl.entity.PFFScoutingData
 
-import javax.print.attribute.standard.MediaSize.NA
-
 object PFFScoutingDataExtractor {
 
   private def kickDirectionMissMatchExtract(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
