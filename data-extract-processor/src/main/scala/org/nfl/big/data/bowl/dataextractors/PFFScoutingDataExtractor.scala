@@ -9,7 +9,7 @@ import org.nfl.big.data.bowl.entity.PFFScoutingData
 
 object PFFScoutingDataExtractor {
 
-  private def kickDirectionMissMatchExtract(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
+  private def kickDirectionMissMatchExtractWithGameId(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
     val filterData = pffScoutingRDD
       .filter(t => !t.kickDirectionIntended.equalsIgnoreCase(NOT_AVAILABLE)
@@ -48,7 +48,7 @@ object PFFScoutingDataExtractor {
 
   def kickDirectionMissMatchExtractToDf(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
 
-    val kickDirectionMissMatch: RDD[(String, String)] = kickDirectionMissMatchExtract(pffScoutingRDD = pffScoutingRDD)
+    val kickDirectionMissMatch: RDD[(String, String)] = kickDirectionMissMatchExtractWithGameId(pffScoutingRDD = pffScoutingRDD)
 
     spark
       .createDataFrame(kickDirectionMissMatch)
@@ -121,6 +121,12 @@ object PFFScoutingDataExtractor {
     spark
       .createDataFrame(distanceRDD)
       .toDF("gameId", "totalHangingTime")
+  }
+
+  def kickDirectionMissMatchExtractWithPlayId(pffScoutingRDD: RDD[PFFScoutingData]): Long = {
+
+    pffScoutingRDD.filter(f => f.playId.equalsIgnoreCase("37")).count()
+
   }
 
 }
