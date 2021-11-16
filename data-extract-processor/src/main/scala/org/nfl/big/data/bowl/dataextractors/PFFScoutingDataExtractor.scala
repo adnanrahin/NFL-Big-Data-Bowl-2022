@@ -37,7 +37,7 @@ object PFFScoutingDataExtractor {
                   str =>
                     val kickDirection = str._1
                     val count = str._2
-                    s"$kickDirection $COLON_DELIMITER $count"
+                    s"$kickDirection$COLON_DELIMITER$count"
                 }.mkString(PIPE_DELIMITER)
             )
         }
@@ -125,7 +125,7 @@ object PFFScoutingDataExtractor {
 
   private def returnKickDirectionMissMatchExtractWithPlayId(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
-    val resutl = pffScoutingRDD
+    val result = pffScoutingRDD
       .filter(t => !t.returnDirectionIntended.equalsIgnoreCase(NOT_AVAILABLE)
         && !t.returnDirectionActual.equalsIgnoreCase(NOT_AVAILABLE))
       .map(t => (t.playId, t.returnDirectionIntended, t.returnDirectionActual))
@@ -154,7 +154,7 @@ object PFFScoutingDataExtractor {
       }
       .filter(t => t._2.nonEmpty)
 
-    resutl.persist(StorageLevel.MEMORY_AND_DISK)
+    result.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
   def returnKickDirectionMissMatchExtractWithPlayIdToDf(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
