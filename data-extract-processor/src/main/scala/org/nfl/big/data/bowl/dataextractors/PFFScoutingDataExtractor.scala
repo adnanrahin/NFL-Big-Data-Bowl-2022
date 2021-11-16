@@ -167,7 +167,7 @@ object PFFScoutingDataExtractor {
 
     spark
       .createDataFrame(kickDirectionMissMatch)
-      .toDF("gameId", "KickDirections")
+      .toDF("gameId", "ReturnKickDirections")
   }
 
 }
