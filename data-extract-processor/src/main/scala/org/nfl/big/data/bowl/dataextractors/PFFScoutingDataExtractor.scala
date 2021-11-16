@@ -156,8 +156,18 @@ object PFFScoutingDataExtractor {
             )
         }
         .filter(t => t._2.nonEmpty)
-        
+
     result.persist(StorageLevel.MEMORY_AND_DISK)
+  }
+
+  def returnKickDirectionMissMatchExtractWithPlayIdToDf(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
+
+    val kickDirectionMissMatch: RDD[(String, String)] =
+      returnKickDirectionMissMatchExtractWithPlayId(pffScoutingRDD = pffScoutingRDD)
+
+    spark
+      .createDataFrame(kickDirectionMissMatch)
+      .toDF("gameId", "KickDirections")
   }
 
 }
