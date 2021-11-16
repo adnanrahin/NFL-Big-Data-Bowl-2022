@@ -123,41 +123,38 @@ object PFFScoutingDataExtractor {
       .toDF("gameId", "totalHangingTime")
   }
 
-  def returnKickDirectionMissMatchExtractWithPlayId(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
+  private def returnKickDirectionMissMatchExtractWithPlayId(pffScoutingRDD: RDD[PFFScoutingData]): RDD[(String, String)] = {
 
-    val filterData = pffScoutingRDD
+    val resutl = pffScoutingRDD
       .filter(t => !t.returnDirectionIntended.equalsIgnoreCase(NOT_AVAILABLE)
         && !t.returnDirectionActual.equalsIgnoreCase(NOT_AVAILABLE))
+      .map(t => (t.playId, t.returnDirectionIntended, t.returnDirectionActual))
+      .groupBy(t => t._1)
+      .map {
+        t =>
+          (t._1,
+            t._2
+              .toList
+              .filter(f => !f._2.equalsIgnoreCase(f._3))
+              .map(f => (f._2, f._3))
+              .flatMap {
+                t => t._1 :: t._2 :: Nil
+              }
+              .mkString
+              .groupBy(identity)
+              .mapValues(_.length)
+              .toList
+              .map {
+                str =>
+                  val returnDirection = str._1
+                  val count = str._2
+                  s"$returnDirection$COLON_DELIMITER$count"
+              }.mkString(PIPE_DELIMITER)
+          )
+      }
+      .filter(t => t._2.nonEmpty)
 
-    val result: RDD[(String, String)] =
-      filterData
-        .map(t => (t.playId, t.returnDirectionIntended, t.returnDirectionActual))
-        .groupBy(t => t._1)
-        .map {
-          t =>
-            (t._1,
-              t._2
-                .toList
-                .filter(f => !f._2.equalsIgnoreCase(f._3))
-                .map(f => (f._2, f._3))
-                .flatMap {
-                  t => t._1 :: t._2 :: Nil
-                }
-                .mkString
-                .groupBy(identity)
-                .mapValues(_.length)
-                .toList
-                .map {
-                  str =>
-                    val returnDirection = str._1
-                    val count = str._2
-                    s"$returnDirection$COLON_DELIMITER$count"
-                }.mkString(PIPE_DELIMITER)
-            )
-        }
-        .filter(t => t._2.nonEmpty)
-
-    result.persist(StorageLevel.MEMORY_AND_DISK)
+    resutl.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
   def returnKickDirectionMissMatchExtractWithPlayIdToDf(pffScoutingRDD: RDD[PFFScoutingData], spark: SparkSession): DataFrame = {
