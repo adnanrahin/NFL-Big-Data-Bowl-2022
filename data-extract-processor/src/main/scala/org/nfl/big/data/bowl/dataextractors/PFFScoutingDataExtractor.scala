@@ -126,6 +126,7 @@ object PFFScoutingDataExtractor {
   def kickDirectionMissMatchExtractWithPlayId(pffScoutingRDD: RDD[PFFScoutingData]): Long = {
 
     pffScoutingRDD.filter(f => f.playId.equalsIgnoreCase("37")).count()
+    
 
   }
 
