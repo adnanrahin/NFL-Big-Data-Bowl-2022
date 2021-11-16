@@ -84,6 +84,10 @@ object BigDataBowlProcessor {
         val kickDirectionMissMatch = PFFScoutingDataExtractor
           .kickDirectionMissMatchExtractToDf(pffScoutingRDD = pffScoutingRDD, spark = spark)
         DataProcessorHelper.dataWriter(kickDirectionMissMatch, dataPath, directoryName = "kickdirectionmissmatch")
+      }case "10" => {
+        val returnKickDirectionMissMatch = PFFScoutingDataExtractor
+          .returnKickDirectionMissMatchExtractWithPlayIdToDf(pffScoutingRDD = pffScoutingRDD, spark = spark)
+        DataProcessorHelper.dataWriter(returnKickDirectionMissMatch, dataPath, directoryName = "returnkickdirectionmissmatch")
       }
       case _ => {
         try {
