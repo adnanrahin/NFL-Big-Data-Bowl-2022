@@ -104,7 +104,7 @@ The 2022 Big Data Bowl data contains Next Gen Stats player tracking, play, game,
 13. missedTacklers: Jersey number and team code of player(s) charged with a missed tackle on the play. It will be reasonable to assume that he should have brought down the ball carrier and failed to do so. This situation does not have to entail contact, but it most frequently does. Missed tackles on a QB by a pass rusher are also included here. Multiple missed tacklers on a play are separated by a ; (text).
 14. assistTacklers: Jersey number and team code of player(s) assisting on the tackle. Multiple assist tacklers on a play are separated by a ; (text).
 15. tacklers: Jersey number and team code of player making the tackle (text).
-16. kickoffReturnFormation: 3 digit code indicating the number of players in the Front Wall, Mid Wall and Back Wall (text).
+16. kickoffReturnFormation: 3-digit code indicating the number of players in the Front Wall, Mid Wall and Back Wall (text).
 17. gunners: Jersey number and team code of player(s) lined up as gunner on punt unit. Multiple gunners on a play are separated by a ; (text).
 18. puntRushers: Jersey number and team code of player(s) on the punt return unit with "Punt Rush" role for actively trying to block the punt. Does not include players crossing the line of scrimmage to engage in punt coverage players in a "Hold Up" role. Multiple punt rushers on a play are separated by a ; (text).
 19. specialTeamsSafeties: Jersey number and team code for player(s) with "Safety" roles on kickoff coverage and field goal/extra point block units - and those not actively advancing towards the line of scrimmage on the punt return unit. Multiple special teams safeties on a play are separated by a ; (text).
@@ -117,7 +117,7 @@ The 2022 Big Data Bowl data contains Next Gen Stats player tracking, play, game,
     4. BOG: Bobbled on Ground
     5. CC: Clean Catch from Air
     6. CFFG: Clean Field From Ground
-    7. DEZ: Direct to Endzone
+    7. DEZ: Direct to End zone
     8. ICC: Incidental Coverage Team Contact
     9. KTB: Kick Team Knocked Back
     10. KTC: Kick Team Catch
