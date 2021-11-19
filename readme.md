@@ -9,7 +9,7 @@ The 2022 Big Data Bowl data contains Next Gen Stats player tracking, play, game,
 
 4. Tracking data: Files tracking[season].csv contain player tracking data from season [season]. The key variables are gameId, playId, and nflId.
 
-5. PFF Scouting data: The PFFScoutingData.csv file contains play-level scouting information for each game. The key variables are gameId and playId.
+5. PFFScoutingdata: The PFFScoutingData.csv file contains play-level scouting information for each game. The key variables are gameId and playId.
 
 ### Game data
 1. gameId: Game identifier, unique (numeric)
