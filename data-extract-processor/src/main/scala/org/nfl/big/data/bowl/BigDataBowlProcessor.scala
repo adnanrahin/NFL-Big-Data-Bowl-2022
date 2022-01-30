@@ -19,7 +19,7 @@ object BigDataBowlProcessor {
     val spark = SparkSession
       .builder()
       .appName("BigDataBowlProcessor")
-      .master("local[*]")
+      .master(args(2))
       .getOrCreate()
 
     val sc = spark.sparkContext
