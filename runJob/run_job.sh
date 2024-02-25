@@ -11,9 +11,9 @@ $SPARK_HOME/bin/spark-submit \
     --deploy-mode cluster \
     --class org.nfl.big.data.bowl.BigDataBowlProcessor \
     --name BigDataBowlProcessorSpark \
-    --driver-memory 8G \
+    --driver-memory 12G \
     --driver-cores 6 \
     --executor-memory 12G \
-    --executor-cores 2 \
+    --executor-cores 4 \
     --total-executor-cores 12 \
     $APP_JAR $INPUT_PATH $OUTPUT_PATH $PARTITIONS
