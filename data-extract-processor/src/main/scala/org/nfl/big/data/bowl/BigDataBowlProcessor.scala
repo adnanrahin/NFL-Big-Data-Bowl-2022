@@ -20,10 +20,8 @@ object BigDataBowlProcessor {
       .master("local[*]")
       .getOrCreate()
 
-    val sc = spark.sparkContext
-
-    val dataPath = "C:\\Users\\rahin\\Desktop\\nfl_super_bowl_data\\"
-    val run = "1"
+    val dataPath = args(0)
+    val outputPath = args(1)
 
     val gameDataLoader: GameDataLoader = new GameDataLoader(dataPath + Constant.GAMES, spark)
     val pffScoutingDataLoader: PFFScoutingDataLoader = new PFFScoutingDataLoader(dataPath + Constant.PFFSCOUNTINGDATA, spark)
@@ -40,43 +38,43 @@ object BigDataBowlProcessor {
 
     val touchdownDF = TrackingDataExtractor
       .findEventByEventNameToDF("touchdown", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(dataFrame = touchdownDF, dataPath = dataPath, directoryName = "touchdown")
+    DataProcessorHelper.dataWriter(dataFrame = touchdownDF, dataPath = outputPath, directoryName = "touchdown")
 
     val homeTouchDownLeftDF = TrackingDataExtractor
       .findHomeTeamEventToDF("touchdown", "left", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = dataPath, directoryName = "hometeamtouchdownleft")
+    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownLeftDF, dataPath = outputPath, directoryName = "hometeamtouchdownleft")
 
     val homeTouchDownRightDF = TrackingDataExtractor
       .findHomeTeamEventToDF("touchdown", "right", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownRightDF, dataPath = dataPath, directoryName = "hometeamtouchdownright")
+    DataProcessorHelper.dataWriter(dataFrame = homeTouchDownRightDF, dataPath = outputPath, directoryName = "hometeamtouchdownright")
 
     val awayTouchDownLeftDF = TrackingDataExtractor
       .findAwayTeamEventToDF("touchdown", "left", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(awayTouchDownLeftDF, dataPath, directoryName = "awayteamtouchdownleft")
+    DataProcessorHelper.dataWriter(awayTouchDownLeftDF, outputPath, directoryName = "awayteamtouchdownleft")
 
     val awayTouchDownRightDF = TrackingDataExtractor
       .findAwayTeamEventToDF("touchdown", "right", trackingRDD, spark)
-    DataProcessorHelper.dataWriter(awayTouchDownRightDF, dataPath, directoryName = "awayteamtouchdownright")
+    DataProcessorHelper.dataWriter(awayTouchDownRightDF, outputPath, directoryName = "awayteamtouchdownright")
 
     val totalDistanceCoverInEachGame = TrackingDataExtractor
       .findTotalDistanceRunInEachGameToDf(trackingRDD = trackingRDD, spark = spark)
-    DataProcessorHelper.dataWriter(totalDistanceCoverInEachGame, dataPath, directoryName = "totaldistance")
+    DataProcessorHelper.dataWriter(totalDistanceCoverInEachGame, outputPath, directoryName = "totaldistance")
 
     val totalHangingTimeInEachGame = PFFScoutingDataExtractor
       .findTotalDistanceRunInEachGameToDf(pffScoutingRDD = pffScoutingRDD, spark = spark)
-    DataProcessorHelper.dataWriter(totalHangingTimeInEachGame, dataPath, directoryName = "totalhangingtime")
+    DataProcessorHelper.dataWriter(totalHangingTimeInEachGame, outputPath, directoryName = "totalhangingtime")
 
     val puntRushers = PFFScoutingDataExtractor
       .puntRushersToDF(pffScoutingRDD = pffScoutingRDD, spark = spark)
-    DataProcessorHelper.dataWriter(puntRushers, dataPath, directoryName = "extractpuntrushers")
+    DataProcessorHelper.dataWriter(puntRushers, outputPath, directoryName = "extractpuntrushers")
 
     val kickDirectionMissMatch = PFFScoutingDataExtractor
       .kickDirectionMissMatchExtractToDf(pffScoutingRDD = pffScoutingRDD, spark = spark)
-    DataProcessorHelper.dataWriter(kickDirectionMissMatch, dataPath, directoryName = "kickdirectionmissmatch")
+    DataProcessorHelper.dataWriter(kickDirectionMissMatch, outputPath, directoryName = "kickdirectionmissmatch")
 
     val returnKickDirectionMissMatch = PFFScoutingDataExtractor
       .returnKickDirectionMissMatchExtractWithPlayIdToDf(pffScoutingRDD = pffScoutingRDD, spark = spark)
-    DataProcessorHelper.dataWriter(returnKickDirectionMissMatch, dataPath, directoryName = "returnkickdirectionmissmatch")
+    DataProcessorHelper.dataWriter(returnKickDirectionMissMatch, outputPath, directoryName = "returnkickdirectionmissmatch")
 
   }
 }
